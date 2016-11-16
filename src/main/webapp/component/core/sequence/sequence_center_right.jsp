@@ -6,15 +6,15 @@
 	</h2>
 </div>
 <div class="cl-mcont">
-	<div class="block-flat" style="padding-top: 0px;">
-		<div class="row">
+	<div class="block-flat">
+		<div class="content">
 		<div classs="table-responsive">
 				<table class="table table-bordered table-hover">
 					<tr>
 						<td><fmt:message key="global.sequence.name"/></td>
 						<td><fmt:message key="global.sequence.value"/></td>
 						<!--@generate-entity-jsp-property-desc@-->
-						<td><fmt:message key="global.edit"></fmt:message></td>
+						<!--  <td><fmt:message key="global.edit"></fmt:message></td>-->
 						<td><fmt:message key="global.remove"></fmt:message></td>
 					</tr>
 					<c:forEach items="${sequences.content}" var="sequence">
@@ -22,7 +22,9 @@
 							<td>${sequence.name}</td>
 							<td>${sequence.seq}</td>
 							<!--@generate-entity-jsp-property-value@-->
+							<!-- 
 							<td><a href="<c:url value="/parse/filterWord/edit/${filterWord.id}"/>"> <fmt:message key="global.edit"></fmt:message>
+							 -->
 							</a></td>
 							<td><a href="<c:url value="/sequence/remove/${sequence.id}"/>"> <fmt:message key="global.remove"></fmt:message>
 							</a></td>

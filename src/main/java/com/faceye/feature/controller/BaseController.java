@@ -144,10 +144,10 @@ abstract public class BaseController<T, ID extends Serializable, S extends BaseS
 			while (keyIterator.hasNext()) {
 				String key = keyIterator.next();
 				Object value = searchParams.get(key);
-				logger.debug(">>FaceYe Key is >>:" + key);
+				//logger.debug(">>FaceYe Key is >>:" + key);
 				if (StringUtils.indexOf(key, "|") != -1) {
 					String subKey = StringUtils.split(key, "|")[1];
-					logger.debug(">>FaceYe -->Sub key is:" + subKey);
+					//logger.debug(">>FaceYe -->Sub key is:" + subKey);
 					if(StringUtils.contains(subKey, ".$")){
 						subKey=StringUtils.replace(subKey, ".$", "");
 					}

@@ -65,11 +65,12 @@
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 		<constructor-arg name="mongoConverter" ref="mappingMongoConverter" />
 	</bean>
-
-	<!-- <mongo:repositories base-package="com.faceye" repository-impl-postfix="Impl" 
+<!--
+	<mongo:repositories base-package="com.faceye" repository-impl-postfix="Impl" 
 		factory-class="com.faceye.feature.repository.mongo.impl.BaseMongoRepositoryBean" 
 		/> -->
-	<mongo:repositories base-package="com"
+		
+	<mongo:repositories base-package="com.faceye.*"
 		base-class="com.faceye.feature.repository.mongo.impl.BaseMongoRepositoryImpl" repository-impl-postfix="Impl" >
 		<!--
 		<exclude-filter type="regex" expression="**/*CustomerRepository"/>

@@ -1,6 +1,7 @@
 package com.faceye.feature.repository.mongo.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,8 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 			if (StringUtils.startsWithIgnoreCase(key, "SORT")) {
 				String property = StringUtils.split(key, "|")[1];
 				String order = MapUtils.getString(params, key);
-				if (isPropertyExist(property)) {
+				boolean isPropertyExist = isPropertyExist(property);
+				if (isPropertyExist) {
 					Direction direction = Direction.ASC;
 					if (StringUtils.equals(order, "asc")) {
 						direction = Direction.ASC;
@@ -102,6 +104,8 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 					} else {
 						sort.and(new Sort(direction, property));
 					}
+				} else {
+					logger.debug(">>FaceYe --> proeprty :" + property + " not exist in bean: " + entityClass.getName());
 				}
 			}
 		}
@@ -113,10 +117,20 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 
 	protected boolean isPropertyExist(String propertyName) {
 		boolean isExist = false;
-		Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
-		if (properties != null && properties.containsKey(propertyName)) {
-			isExist = true;
+		Field[] fields = entityClass.getDeclaredFields();
+		if (fields != null) {
+			for (Field field : fields) {
+				String name = field.getName();
+				if (StringUtils.equalsIgnoreCase(name, propertyName)) {
+					isExist = true;
+					break;
+				}
+			}
 		}
+		// Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
+		// if (properties != null && properties.containsKey(propertyName)) {
+		// isExist = true;
+		// }
 		// PropertyUtils.getMappedPropertyDescriptors(beanClass)
 		return isExist;
 	}

@@ -194,7 +194,8 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 			if (StringUtils.startsWithIgnoreCase(key, "SORT")) {
 				String property = StringUtils.split(key, "|")[1];
 				String order = MapUtils.getString(params, key);
-				if (isPropertyExist(property)) {
+				boolean isPropertyExist=isPropertyExist(property);
+				if (isPropertyExist) {
 					Direction direction = Direction.ASC;
 					if (StringUtils.equals(order, "asc")) {
 						direction = Direction.ASC;
@@ -206,6 +207,8 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 					} else {
 						sort.and(new Sort(direction, property));
 					}
+				}else{
+					logger.debug(">>FaceYe --> proeprty :"+property+" not exist in bean: "+entityClass.getName());
 				}
 			}
 		}

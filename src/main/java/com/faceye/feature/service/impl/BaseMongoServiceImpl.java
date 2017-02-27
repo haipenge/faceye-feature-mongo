@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,6 +178,54 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	}
 
 	/**
+	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc");
+	 * 
+	 * @param params
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年2月27日 下午12:27:55
+	 */
+	protected Sort buildSort(Map<String, Object> params) {
+		Sort sort = null;
+		Iterator<String> it = params.keySet().iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			if (StringUtils.startsWithIgnoreCase(key, "SORT")) {
+				String property = StringUtils.split(key, "|")[1];
+				String order = MapUtils.getString(params, key);
+				if (isPropertyExist(property)) {
+					Direction direction = Direction.ASC;
+					if (StringUtils.equals(order, "asc")) {
+						direction = Direction.ASC;
+					} else {
+						direction = Direction.DESC;
+					}
+					if (sort == null) {
+						sort = new Sort(direction, property);
+					} else {
+						sort.and(new Sort(direction, property));
+					}
+				}
+			}
+		}
+		if (sort == null) {
+			sort = new Sort(Direction.DESC, "id");
+		}
+		return sort;
+	}
+
+	protected boolean isPropertyExist(String propertyName) {
+		boolean isExist = false;
+		Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
+		if (properties != null && properties.containsKey(propertyName)) {
+			isExist = true;
+		}
+		// PropertyUtils.getMappedPropertyDescriptors(beanClass)
+		return isExist;
+	}
+
+	/**
 	 * 取得实体当前的最大ID
 	 * 
 	 * @todo
@@ -213,6 +263,5 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 			logger.debug(">>FaceYe -- reset entity max id in " + getClass().getName() + ",entity is null.");
 		}
 	}
-	
 
 }

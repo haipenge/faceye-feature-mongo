@@ -5,9 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -84,7 +82,7 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 	 * @Author:haipenge
 	 * @Date:2017年2月27日 下午12:27:55
 	 */
-	protected Sort buildSort(Map params) {
+	protected Sort buildSort(Map<String, Object> params) {
 		Sort sort = null;
 		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
@@ -107,6 +105,9 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 				}
 			}
 		}
+		if (sort == null) {
+			sort = new Sort(Direction.DESC, "id");
+		}
 		return sort;
 	}
 
@@ -116,6 +117,7 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 		if (properties != null && properties.containsKey(propertyName)) {
 			isExist = true;
 		}
+		// PropertyUtils.getMappedPropertyDescriptors(beanClass)
 		return isExist;
 	}
 

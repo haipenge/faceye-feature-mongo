@@ -55,7 +55,7 @@ public class SearchFilter {
 				continue;
 			}
 			String filedName = names[1];
-			if(!StringUtils.equalsIgnoreCase("SORT")){
+			if(!StringUtils.equalsIgnoreCase(names[0],"SORT")){
 			  Operator operator = Operator.valueOf(names[0].toUpperCase());
 			  // 创建searchFilter
 			  SearchFilter filter = new SearchFilter(filedName, operator, value);

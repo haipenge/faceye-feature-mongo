@@ -55,11 +55,12 @@ public class SearchFilter {
 				continue;
 			}
 			String filedName = names[1];
-			Operator operator = Operator.valueOf(names[0].toUpperCase());
-
-			// 创建searchFilter
-			SearchFilter filter = new SearchFilter(filedName, operator, value);
-			filters.put(key, filter);
+			if(!StringUtils.equalsIgnoreCase("SORT")){
+			  Operator operator = Operator.valueOf(names[0].toUpperCase());
+			  // 创建searchFilter
+			  SearchFilter filter = new SearchFilter(filedName, operator, value);
+			  filters.put(key, filter);
+			}
 		}
 
 		return filters;

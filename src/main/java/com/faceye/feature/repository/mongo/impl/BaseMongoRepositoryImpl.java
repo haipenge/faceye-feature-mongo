@@ -1,9 +1,15 @@
 package com.faceye.feature.repository.mongo.impl;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +27,21 @@ import com.faceye.feature.repository.mongo.BaseMongoRepository;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.querydsl.core.types.Predicate;
 
-public class BaseMongoRepositoryImpl <T, ID extends Serializable> extends QueryDslMongoRepository<T, ID> implements BaseMongoRepository<T, ID>   {
-	
-	protected Logger logger=LoggerFactory.getLogger(getClass());
+public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDslMongoRepository<T, ID> implements BaseMongoRepository<T, ID> {
+
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	protected MongoOperations mongoOperations=null;
-	
-	private MongoEntityInformation entityInformation=null;
-	
-	private Class entityClass=null;
-	
-	public BaseMongoRepositoryImpl(MongoEntityInformation<T,ID> entityInformation, MongoOperations mongoOperations) {
+	protected MongoOperations mongoOperations = null;
+
+	private MongoEntityInformation entityInformation = null;
+
+	private Class entityClass = null;
+
+	public BaseMongoRepositoryImpl(MongoEntityInformation<T, ID> entityInformation, MongoOperations mongoOperations) {
 		super(entityInformation, mongoOperations);
-		this.mongoOperations=mongoOperations;
-		this.entityInformation=entityInformation;
-		entityClass=this.entityInformation.getJavaType();
+		this.mongoOperations = mongoOperations;
+		this.entityInformation = entityInformation;
+		entityClass = this.entityInformation.getJavaType();
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class BaseMongoRepositoryImpl <T, ID extends Serializable> extends QueryD
 		} else {
 			// OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
 			// })
-			List<T> items = (List) this.findAll(predicate,sort);
+			List<T> items = (List) this.findAll(predicate, sort);
 			res = new PageImpl<T>(items);
 		}
 		return res;
@@ -78,28 +84,39 @@ public class BaseMongoRepositoryImpl <T, ID extends Serializable> extends QueryD
 	 * @Author:haipenge
 	 * @Date:2017年2月27日 下午12:27:55
 	 */
-	protected Sort buildSort(Map params){
+	protected Sort buildSort(Map params) {
 		Sort sort = null;
 		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();
-			if (StringUtils.startsWith(key, "SORT")) {
+			if (StringUtils.startsWithIgnoreCase(key, "SORT")) {
 				String property = StringUtils.split(key, "|")[1];
 				String order = MapUtils.getString(params, key);
-				Direction direction = Direction.ASC;
-				if (StringUtils.equals(order, "asc")) {
-					direction = Direction.ASC;
-				} else {
-					direction = Direction.DESC;
-				}
-				if (sort == null) {
-					sort = new Sort(direction, property);
-				} else {
-					sort.and(new Sort(direction, property));
+				if (isPropertyExist(property)) {
+					Direction direction = Direction.ASC;
+					if (StringUtils.equals(order, "asc")) {
+						direction = Direction.ASC;
+					} else {
+						direction = Direction.DESC;
+					}
+					if (sort == null) {
+						sort = new Sort(direction, property);
+					} else {
+						sort.and(new Sort(direction, property));
+					}
 				}
 			}
 		}
 		return sort;
+	}
+
+	protected boolean isPropertyExist(String propertyName) {
+		boolean isExist = false;
+		Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
+		if (properties != null && properties.containsKey(propertyName)) {
+			isExist = true;
+		}
+		return isExist;
 	}
 
 }

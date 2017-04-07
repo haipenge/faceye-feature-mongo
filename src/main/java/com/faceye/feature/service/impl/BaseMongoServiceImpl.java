@@ -275,6 +275,9 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 				}
 			}
 		}
+		if(!isExist && StringUtils.contains(propertyName, ".")){
+			isExist=true;
+		}
 		// Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
 		// if (properties != null && properties.containsKey(propertyName)) {
 		// isExist = true;

@@ -2,11 +2,16 @@ package com.faceye.feature.repository.mongo.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,6 +29,7 @@ import org.springframework.data.mongodb.repository.support.QueryDslMongoReposito
 
 import com.faceye.feature.repository.mongo.BaseMongoRepository;
 import com.faceye.feature.repository.mongo.DynamicSpecifications;
+
 import com.querydsl.core.types.Predicate;
 
 public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDslMongoRepository<T, ID> implements BaseMongoRepository<T, ID> {
@@ -60,7 +66,7 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
 		}
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = this.buildSort(searchParams);
 		Page<T> res = null;
 		if (size != 0) {
 			Pageable pageable = new PageRequest(page, size, sort);
@@ -73,9 +79,12 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 		}
 		return res;
 	}
-
 	/**
-	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc");
+	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc"); 
+	 * 如果有多个排序key params.put("SORT|property:0","asc");
+	 *  params.put("SORT|property:1","asc");
+	 *   ... 
+	 *   排序将以0...n的方式进行
 	 * 
 	 * @param params
 	 * @return
@@ -85,27 +94,47 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 	 */
 	protected Sort buildSort(Map<String, Object> params) {
 		Sort sort = null;
+		List<Map<Sort, Integer>> sorts = new ArrayList<Map<Sort, Integer>>(0);
 		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();
 			if (StringUtils.startsWithIgnoreCase(key, "SORT")) {
 				String property = StringUtils.split(key, "|")[1];
+				String realProperty = "";
+				Integer index = 0;
+				if (StringUtils.contains(property, ":")) {
+					String[] splits = StringUtils.split(property, ":");
+					realProperty = StringUtils.trim(splits[0]);
+					index = Integer.parseInt(StringUtils.trim(splits[1]));
+				} else {
+					realProperty = property;
+				}
 				String order = MapUtils.getString(params, key);
-				boolean isPropertyExist = isPropertyExist(property);
+				boolean isPropertyExist = isPropertyExist(realProperty);
 				if (isPropertyExist) {
 					Direction direction = Direction.ASC;
-					if (StringUtils.equals(order, "asc")) {
+					if (StringUtils.equalsIgnoreCase(order, "asc")) {
 						direction = Direction.ASC;
 					} else {
 						direction = Direction.DESC;
 					}
-					if (sort == null) {
-						sort = new Sort(direction, property);
-					} else {
-						sort.and(new Sort(direction, property));
-					}
+					Map<Sort, Integer> map = new HashMap<Sort, Integer>();
+					Sort subSort = new Sort(direction, realProperty);
+					map.put(subSort, index);
+					sorts.add(map);
 				} else {
 					logger.debug(">>FaceYe --> proeprty :" + property + " not exist in bean: " + entityClass.getName());
+				}
+			}
+		}
+		if (CollectionUtils.isNotEmpty(sorts)) {
+			Collections.sort(sorts, new SortComparator());
+			for (Map<Sort, Integer> map : sorts) {
+				Sort inSort = map.keySet().iterator().next();
+				if (sort == null) {
+					sort = inSort;
+				} else {
+					sort.and(inSort);
 				}
 			}
 		}
@@ -113,6 +142,25 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 			sort = new Sort(Direction.DESC, "id");
 		}
 		return sort;
+	}
+
+	/**
+	 * 对排序key的排序
+	 * 
+	 * @author haipenge
+	 *
+	 */
+	class SortComparator implements Comparator<Map<Sort, Integer>> {
+		@Override
+		public int compare(Map<Sort, Integer> o1, Map<Sort, Integer> o2) {
+			int res = 0;
+			if (o1 != null && o2 != null) {
+				Integer v1 = o1.values().iterator().next();
+				Integer v2 = o2.values().iterator().next();
+				res = v1.compareTo(v2);
+			}
+			return res;
+		}
 	}
 
 	protected boolean isPropertyExist(String propertyName) {
@@ -127,6 +175,9 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 				}
 			}
 		}
+		if(!isExist && StringUtils.contains(propertyName, ".")){
+			isExist=true;
+		}
 		// Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
 		// if (properties != null && properties.containsKey(propertyName)) {
 		// isExist = true;
@@ -134,5 +185,6 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 		// PropertyUtils.getMappedPropertyDescriptors(beanClass)
 		return isExist;
 	}
+
 
 }

@@ -36,7 +36,7 @@ public class StorageHandler {
 	private Logger logger = LoggerFactory.getLogger(StorageHandler.class);
 
 	private StorageHandler() {
-		String configStoragePath = BeanContextUtil.getInstance().getBean(PropertyService.class).get(DEFAULT_STORAGE_CONFIG_KEY);
+		String configStoragePath = BeanContextUtil.getBean(PropertyService.class).get(DEFAULT_STORAGE_CONFIG_KEY);
 		if (StringUtils.isNotEmpty(configStoragePath)) {
 			STORAGE_PATH = configStoragePath;
 		}

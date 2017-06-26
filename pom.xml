@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- 主要依赖库的版本定义 -->
-		<spring.version>4.3.6.RELEASE</spring.version>
+		<spring.version>4.3.9.RELEASE</spring.version>
 		<spring-data-mongodb.version>1.9.2.RELEASE</spring-data-mongodb.version>
 		<mongo-driver.version>3.2.2</mongo-driver.version>
 		<junit.version>4.12</junit.version>
@@ -36,11 +36,11 @@
 			<version>${faceye-util-manager.version}</version>
 		</dependency>
 
-		
+
 		<dependency>
-		    <groupId>org.mongodb</groupId> 
-		    <artifactId>mongo-java-driver</artifactId> 
-			<version>${mongo-driver.version}</version> 
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo-driver.version}</version>
 		</dependency>
 		<!-- junit -->
 		<dependency>
@@ -64,33 +64,27 @@
 			<scope>provided</scope>
 		</dependency>
 
-<dependency>
-           <groupId>javax.persistence</groupId>
-           <artifactId>persistence-api</artifactId>
-           <version>${javax.persistence.version}</version>
-		</dependency>
-		
-		<!--
 		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-maven-plugin</artifactId>
-			<version>${querydsl.version}</version>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${javax.persistence.version}</version>
 		</dependency>
-	-->
-	<dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring-data-mongodb.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-maven-plugin</artifactId> 
+			<version>${querydsl.version}</version> </dependency> -->
+		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-mongodb</artifactId>
-			<!--
-			<exclusions>
-				<exclusion>
-					<groupId>org.mongodb</groupId>
-					<artifactId>mongo-java-driver</artifactId>
-				</exclusion>
-			</exclusions>
-		-->
+			<!-- <exclusions> <exclusion> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
+				</exclusion> </exclusions> -->
 			<version>${querydsl.version}</version>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
 		<finalName>faceye-feature-mongo</finalName>
@@ -146,35 +140,20 @@
 						</goals>
 						<configuration>
 							<outputDirectory>target/generated-sources</outputDirectory>
-							
-							<!--<processor>com.querydsl.mongodb.morphiaMorphiaAnnotationProcessor</processor>-->
-							
+
+							<!--<processor>com.querydsl.mongodb.morphiaMorphiaAnnotationProcessor</processor> -->
+
 							<processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>
-						
+
 						</configuration>
 					</execution>
 				</executions>
-				<!--
-				<dependencies>
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-apt</artifactId>
-						<version>${querydsl.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-mongodb</artifactId>
-					
-						<version>${querydsl.version}</version>
-					</dependency>
-
-					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
-						<artifactId>querydsl-codegen</artifactId>
-						<version>${querydsl.version}</version>
-					</dependency>
-				</dependencies>
-			-->
+				<!-- <dependencies> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-apt</artifactId> <version>${querydsl.version}</version> 
+					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-mongodb</artifactId> 
+					<version>${querydsl.version}</version> </dependency> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-codegen</artifactId> <version>${querydsl.version}</version> 
+					</dependency> </dependencies> -->
 			</plugin>
 
 			<plugin>
@@ -211,7 +190,7 @@
 						</execution> -->
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<!-- YUI Compressor Maven压缩插件 -->
 				<groupId>net.alchim31.maven</groupId>
@@ -409,7 +388,7 @@
 		</profile>
 	</profiles>
 	<repositories>
-		
+
 		<repository>
 			<id>org.springframework.maven.release</id>
 			<name>Spring Maven Release Repository</name>

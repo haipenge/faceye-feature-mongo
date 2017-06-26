@@ -105,7 +105,7 @@ abstract public class BaseController<T, ID extends Serializable, S extends BaseS
 	 */
 	protected ApplicationContext getApplicationContext() {
 		ApplicationContext ctx = null;
-		ctx = BeanContextUtil.getInstance().getApplicationContext();
+		ctx = BeanContextUtil.getApplicationContext();
 		return ctx;
 	}
 

@@ -49,7 +49,7 @@ public class UploadFile {
 
 	public String getUrl() {
 		if (StringUtils.isEmpty(url)) {
-			String imgHost = BeanContextUtil.getInstance().getBean(PropertyService.class).get("image.server");
+			String imgHost = BeanContextUtil.getBean(PropertyService.class).get("image.server");
 			if (StringUtils.isNotEmpty(imgHost)) {
 				url = imgHost + storePath;
 			}

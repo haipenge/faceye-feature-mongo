@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
-import com.faceye.feature.util.ServiceException;
 
 public interface BaseService<T, ID extends Serializable> {
 	/**
@@ -17,30 +16,30 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @Date:Create Date:2014年3月19日
 	 * @Author @haipenge
 	 */
-	public void save(T entity) throws ServiceException;
+	public void save(T entity) ;
 	
 	/**
 	 * 批量保存
 	 * @todo
 	 * @param entities
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
 	
-	public void save(Iterable<T> entities) throws ServiceException;
+	public void save(Iterable<T> entities) ;
 	
 	/**
 	 * 
 	 * @todo
 	 * @param entity
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-	public void saveAndFlush(T entity) throws ServiceException;
+	public void saveAndFlush(T entity) ;
 
 	
 
@@ -52,49 +51,49 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @Date:Create Date:2014年3月19日
 	 * @Author @haipenge
 	 */
-	public void remove(ID id) throws ServiceException;
+	public void remove(ID id) ;
 	
 	/**
 	 * 删除
 	 * @todo
 	 * @param entity
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月19日
 	 */
-	public void remove(T entity) throws ServiceException;
+	public void remove(T entity) ;
 	
 	/**
 	 * 
 	 * @todo
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-	public void removeAll() throws ServiceException;
+	public void removeAll() ;
 	
 	/**
 	 * 
 	 * @todo
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-	public void removeAllInBatch() throws ServiceException;
+	public void removeAllInBatch() ;
 	
 	/**
 	 * 批量删除
 	 * @todo
 	 * @param entities
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-	public void removeInBatch(Iterable<T> entities) throws ServiceException;
+	public void removeInBatch(Iterable<T> entities) ;
 	
 	
 	/**
@@ -106,40 +105,40 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @Date:Create Date:2014年3月19日
 	 * @Author @haipenge
 	 */
-	public T get(ID id) throws ServiceException;
+	public T get(ID id) ;
 	
 	
 	/**
 	 * 
 	 * @todo
 	 * @return
-	 * @throws ServiceException
+	 * @
 	 * @author:@haipenge
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-    public List<T> getAll() throws ServiceException;
+    public List<T> getAll() ;
     
     /**
      * 查询ID列表的值
      * @todo
      * @param ids
      * @return
-     * @throws ServiceException
+     * @
      * @author:@haipenge
      * haipenge@gmail.com
      * 2014年5月20日
      */
-    public List<T> getAll(Iterable<ID> ids) throws ServiceException;
+    public List<T> getAll(Iterable<ID> ids) ;
     /**
      * 分页查询
      * @todo
      * @param pageable
      * @return
-     * @throws ServiceException
+     * @
      * @author:@haipenge
      * haipenge@gmail.com
      * 2014年5月20日
      */
-    public Page<T> getPage(Map<String,Object> searchParams,int page,int size) throws ServiceException;
+    public Page<T> getPage(Map<String,Object> searchParams,int page,int size) ;
 }

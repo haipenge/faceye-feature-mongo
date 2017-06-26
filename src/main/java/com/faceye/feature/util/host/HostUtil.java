@@ -19,7 +19,7 @@ public class HostUtil {
 	 */
 	public static String getHost() {
 		if (StringUtils.isEmpty(HOST)) {
-			HOST = BeanContextUtil.getInstance().getBean(PropertyService.class).get("faceye.host");
+			HOST = BeanContextUtil.getBean(PropertyService.class).get("faceye.host");
 		}
 		return HOST;
 	}
@@ -27,7 +27,7 @@ public class HostUtil {
 	public static String getProperty(String key){
 		String res="";
 		if(StringUtils.isNotEmpty(key)){
-			res=BeanContextUtil.getInstance().getBean(PropertyService.class).get(key);
+			res=BeanContextUtil.getBean(PropertyService.class).get(key);
 		}
 		return res;
 	}
@@ -41,7 +41,7 @@ public class HostUtil {
 	 */
 	public static String getImageServer(){
 	   if(StringUtils.isEmpty(IMAGE_SERVER)){
-		   IMAGE_SERVER=BeanContextUtil.getInstance().getBean(PropertyService.class).get("image.server");
+		   IMAGE_SERVER=BeanContextUtil.getBean(PropertyService.class).get("image.server");
 	   }
 	   return IMAGE_SERVER;
 	}

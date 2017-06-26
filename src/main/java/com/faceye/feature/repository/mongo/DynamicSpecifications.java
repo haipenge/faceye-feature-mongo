@@ -101,7 +101,7 @@ public class DynamicSpecifications {
 				case EQ:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.eq(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							// StringPath stringPath = new StringPath(path, fieldName);
@@ -118,8 +118,8 @@ public class DynamicSpecifications {
 				case NE:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-//							NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.ne(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							// StringPath stringPath = new StringPath(path, fieldName);
@@ -136,8 +136,8 @@ public class DynamicSpecifications {
 				case GT:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-//							NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.gt(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							StringPath stringPath = builder.getString(fieldName);
@@ -156,8 +156,8 @@ public class DynamicSpecifications {
 				case GTE:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-//							NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.goe(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							StringPath stringPath = builder.getString(fieldName);
@@ -176,8 +176,8 @@ public class DynamicSpecifications {
 				case LT:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-//							NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.lt(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							StringPath stringPath = builder.getString(fieldName);
@@ -196,8 +196,8 @@ public class DynamicSpecifications {
 				case LTE:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-//							NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-							NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+							// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 							predicates.add(numberPath.loe(NumberUtils.createNumber(fieldValue.toString())));
 						} else if (fieldValue instanceof String) {
 							StringPath stringPath = builder.getString(fieldName);
@@ -253,8 +253,8 @@ public class DynamicSpecifications {
 					break;
 				case ISEMPTY:
 					if (isNumber || fieldValue instanceof Number) {
-//						NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-						NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+						// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+						NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 						predicates.add(numberPath.isNull());
 					} else if (fieldValue instanceof String) {
 						StringPath stringPath = builder.getString(fieldName);
@@ -266,8 +266,8 @@ public class DynamicSpecifications {
 					break;
 				case ISNULL:
 					if (isNumber || fieldValue instanceof Number) {
-//						NumberPath numberPath = new NumberPath(fieldValue.getClass(), path, fieldName);
-						NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+						// NumberPath numberPath = new NumberPath(fieldValue.getClass(), path, fieldName);
+						NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 						predicates.add(numberPath.isNull());
 					} else if (fieldValue instanceof String) {
 						// StringPath stringPath = new StringPath(path, fieldName);
@@ -280,13 +280,13 @@ public class DynamicSpecifications {
 					break;
 				case IN:
 					if (isNumber || fieldValue instanceof Number) {
-//						NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-						NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+						// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+						NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 						predicates.add(numberPath.in(new Number[] { -1, NumberUtils.createNumber(fieldValue.toString()) }));
 					} else if (fieldValue instanceof Number[]) {
-//						NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-//						NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
-						ArrayPath arrayPath=builder.getArray(fieldName, Number[].class);
+						// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+						// NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+						ArrayPath arrayPath = builder.getArray(fieldName, Number[].class);
 						predicates.add(arrayPath.in((Number[]) fieldValue));
 					} else if (fieldValue instanceof String) {
 						// StringPath stringPath = new StringPath(path, fieldName);
@@ -313,8 +313,8 @@ public class DynamicSpecifications {
 					break;
 				case NOTIN:
 					if (isNumber || fieldValue instanceof Number) {
-//						NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
-						NumberPath numberPath =(NumberPath) createPath(builder,clazz,fieldName,fieldValue.toString());
+						// NumberPath numberPath = new NumberPath(Number.class, path, fieldName);
+						NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
 						predicates.add(numberPath.notIn(new Number[] { -1, NumberUtils.createNumber(fieldValue.toString()) }));
 					} else if (fieldValue instanceof String) {
 						// StringPath stringPath = new StringPath(path, fieldName);
@@ -366,7 +366,7 @@ public class DynamicSpecifications {
 				logger.debug(">>FaceYe --> Default simple expression creator:class is:" + clazz.getName() + ",propery is :" + propertyName + ",type is:" + typeName);
 			}
 			// FieldTypeEnum type=field.getType().get
-		}
+		} 
 		return null;
 	}
 }

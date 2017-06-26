@@ -175,6 +175,7 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 				}
 			}
 		}
+		//todo ,多层对像，需逐层判断
 		if(!isExist && StringUtils.contains(propertyName, ".")){
 			isExist=true;
 		}

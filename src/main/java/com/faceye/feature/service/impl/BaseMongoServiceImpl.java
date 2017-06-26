@@ -275,6 +275,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 				}
 			}
 		}
+		//todo ,多层对像，需逐层判断
 		if(!isExist && StringUtils.contains(propertyName, ".")){
 			isExist=true;
 		}

@@ -181,7 +181,7 @@ public class Upload {
 			} else if (xfilename.endsWith("xls") || xfilename.endsWith("xlsx")) {
 				type = FILE_TYPE.excel.toString();
 			}
-			PropertyService propertyService = BeanContextUtil.getInstance().getBean(PropertyService.class);
+			PropertyService propertyService = BeanContextUtil.getBean(PropertyService.class);
 			if (StringUtils.equals(type, FILE_TYPE.word.toString())) {
 				res = propertyService.get("preview.img.word");
 			}

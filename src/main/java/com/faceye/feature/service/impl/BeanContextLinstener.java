@@ -43,7 +43,7 @@ public class BeanContextLinstener implements ApplicationListener<ContextRefreshe
 
 	private void reset() {
 		SequenceService sequenceService = this.applicationContext.getBean(SequenceService.class);
-		String resetValue = BeanContextUtil.getInstance().getBean(PropertyService.class).get("default.reset.sequence");
+		String resetValue = BeanContextUtil.getBean(PropertyService.class).get("default.reset.sequence");
 		if (StringUtils.isNotEmpty(resetValue) && !StringUtils.contains(resetValue, "$")) {
 			IS_RESET_SEQUENCE = new Boolean(resetValue);
 		}

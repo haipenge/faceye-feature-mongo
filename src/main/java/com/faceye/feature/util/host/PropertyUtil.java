@@ -15,7 +15,7 @@ public class PropertyUtil {
 	public static String get(String key) {
 		String res = "";
 		if (StringUtils.isNotEmpty(key)) {
-			res = BeanContextUtil.getInstance().getBean(PropertyService.class).get(key);
+			res = BeanContextUtil.getBean(PropertyService.class).get(key);
 		}
 		return res;
 	}

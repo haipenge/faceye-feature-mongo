@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
-import com.faceye.feature.util.ServiceException;
 
 public interface BaseService<T, ID extends Serializable> {
 	/**

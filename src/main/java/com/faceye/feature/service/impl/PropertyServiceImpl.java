@@ -22,7 +22,11 @@ public class PropertyServiceImpl implements PropertyService {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
+<<<<<<< HEAD
 	public String get(String key)  {
+=======
+	public String get(String key) {
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 //		log.debug(">>-->key is:" + key);
 		String res = "";
 		if (properties == null) {
@@ -41,7 +45,11 @@ public class PropertyServiceImpl implements PropertyService {
 	
 
 	@Override
+<<<<<<< HEAD
 	public String[] getKeys()  {
+=======
+	public String[] getKeys() {
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 		String keys[]=null;
 		if(properties!=null){
 			Enumeration en=properties.keys();

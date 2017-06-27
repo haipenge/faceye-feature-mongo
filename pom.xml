@@ -14,7 +14,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- 主要依赖库的版本定义 -->
 		<spring.version>4.3.9.RELEASE</spring.version>
+<<<<<<< HEAD
 		<spring-data-mongodb.version>1.10.4.RELEASE</spring-data-mongodb.version>
+=======
+		<spring-data-mongodb.version>1.9.2.RELEASE</spring-data-mongodb.version>
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 		<mongo-driver.version>3.2.2</mongo-driver.version>
 		<junit.version>4.12</junit.version>
 		<!-- Plugin的属性定义 -->
@@ -36,6 +40,7 @@
 			<version>${faceye-util-manager.version}</version>
 		</dependency>
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
@@ -44,6 +49,10 @@
 
 
 		<dependency>
+=======
+
+		<dependency>
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${mongo-driver.version}</version>
@@ -70,6 +79,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
@@ -82,6 +92,26 @@
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-mongodb</artifactId>
 			<!-- <exclusions> <exclusion> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> </exclusion> </exclusions> -->
+=======
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${javax.persistence.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring-data-mongodb.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-maven-plugin</artifactId> 
+			<version>${querydsl.version}</version> </dependency> -->
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-mongodb</artifactId>
+			<!-- <exclusions> <exclusion> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
+				</exclusion> </exclusions> -->
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 			<version>${querydsl.version}</version>
 		</dependency>
 
@@ -148,9 +178,17 @@
 						</configuration>
 					</execution>
 				</executions>
+<<<<<<< HEAD
 				<!-- <dependencies> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-apt</artifactId> <version>${querydsl.version}</version> 
 					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-mongodb</artifactId> <version>${querydsl.version}</version> 
 					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-codegen</artifactId> <version>${querydsl.version}</version> 
+=======
+				<!-- <dependencies> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-apt</artifactId> <version>${querydsl.version}</version> 
+					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-mongodb</artifactId> 
+					<version>${querydsl.version}</version> </dependency> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-codegen</artifactId> <version>${querydsl.version}</version> 
+>>>>>>> 3ac107a295ed78669752937b3f6349fd05c73157
 					</dependency> </dependencies> -->
 			</plugin>
 

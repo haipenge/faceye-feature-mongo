@@ -7,4 +7,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 
 public class BaseMongoRepositoryBean<R extends MongoRepository<T, ID>,T,ID extends Serializable> extends MongoRepositoryFactoryBean<R, T, ID> {
 
+	public BaseMongoRepositoryBean(Class<? extends R> repositoryInterface) {
+		super(repositoryInterface);
+	}
+
 }

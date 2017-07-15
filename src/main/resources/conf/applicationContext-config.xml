@@ -27,7 +27,6 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
-				<value>classpath*:/conf/*.properties</value>
 				<value>classpath*:/*.properties</value>
 			</list>
 		</property>

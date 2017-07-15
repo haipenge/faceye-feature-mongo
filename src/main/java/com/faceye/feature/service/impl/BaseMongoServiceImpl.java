@@ -195,6 +195,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	protected Sort buildSort(Map<String, Object> params) {
 		Sort sort = null;
 		List<Map<Sort, Integer>> sorts = new ArrayList<Map<Sort, Integer>>(0);
+		params=this.filterDuplicateKey(params);
 		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();
@@ -242,6 +243,38 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 			sort = new Sort(Direction.DESC, "id");
 		}
 		return sort;
+	}
+	
+	/**
+	 * 对KEY进行去重
+	 * @return
+	 * @Desc:
+	 * @Author:haipenge
+	 * @Date:2017年7月15日 下午7:57:01
+	 */
+	private Map filterDuplicateKey(Map<String,Object> params){
+		Map map=new HashMap<String,Object>();
+		if(MapUtils.isNotEmpty(params)){
+			Iterator<String> it=params.keySet().iterator();
+			while(it.hasNext()){
+				String key=it.next();
+				Object value=MapUtils.getObject(params, key);
+				if(!this.isMapContainsIgnoreCaseKey(map, key)){
+					map.put(key, value);
+				}
+			}
+		}
+		return map;
+	}
+	
+	private boolean isMapContainsIgnoreCaseKey(Map<String,Object> map,String key){
+		boolean res=false;
+	    Iterator<String> it=map.keySet().iterator();
+	    while(it.hasNext()){
+	    	String mapKey=it.next();
+	    	res=StringUtils.equalsIgnoreCase(mapKey, key);
+	    }
+		return res;
 	}
 
 	/**

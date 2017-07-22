@@ -16,7 +16,7 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @Date:Create Date:2014年3月19日
 	 * @Author @haipenge
 	 */
-	public void save(T entity) ;
+	public T save(T entity) ;
 	
 	/**
 	 * 批量保存
@@ -39,7 +39,7 @@ public interface BaseService<T, ID extends Serializable> {
 	 * haipenge@gmail.com
 	 * 2014年5月20日
 	 */
-	public void saveAndFlush(T entity) ;
+	public T saveAndFlush(T entity) ;
 
 	
 

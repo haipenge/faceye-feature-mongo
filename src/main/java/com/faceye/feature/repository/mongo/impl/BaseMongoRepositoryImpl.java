@@ -70,6 +70,8 @@ public class BaseMongoRepositoryImpl<T, ID extends Serializable> extends QueryDs
 		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
 		if (predicate != null) {
 			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		}else{
+			logger.debug(">>FaceYe --> predicate is null.");
 		}
 		Sort sort = this.buildSort(searchParams);
 		Page<T> res = null;

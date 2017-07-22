@@ -61,7 +61,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	}
 
 	@Override
-	public void save(T entity)  {
+	public T save(T entity)  {
 		try {
 			ID id = (ID) PropertyUtils.getProperty(entity, "id");
 			if (id == null) {
@@ -74,7 +74,8 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 		} catch (NoSuchMethodException e) {
 			logger.error(">>FaceYe throws Exception: --->" + e.toString(), e);
 		}
-		dao.save(entity);
+		entity=dao.save(entity);
+		return entity;
 	}
 
 	public void save(Iterable<T> entities)  {
@@ -101,8 +102,8 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	}
 
 	@Override
-	public void saveAndFlush(T entity)  {
-		save(entity);
+	public T saveAndFlush(T entity)  {
+		return save(entity);
 	}
 
 	@Override

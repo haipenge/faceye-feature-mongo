@@ -225,7 +225,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 					map.put(subSort, index);
 					sorts.add(map);
 				} else {
-					logger.debug(">>FaceYe --> proeprty :" + property + " not exist in bean: " + entityClass.getName());
+					logger.error(">>FaceYe --> proeprty :" + property + " not exist in bean: " + entityClass.getName());
 				}
 			}
 		}

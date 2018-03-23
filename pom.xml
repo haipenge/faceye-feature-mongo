@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-feature</artifactId> <version>1.0</version> <relativePath>../parent/</relativePath> 
-		</parent> -->
+	<!-- <parent> <groupId>org.faceye</groupId> <artifactId>faceye-feature</artifactId> 
+		<version>1.0</version> <relativePath>../parent/</relativePath> </parent> -->
 	<groupId>com.faceye</groupId>
 	<artifactId>faceye-feature-mongo</artifactId>
 	<version>1.0</version>
@@ -13,9 +13,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- 主要依赖库的版本定义 -->
-		<spring.version>4.3.9.RELEASE</spring.version>
-		<spring-data-mongodb.version>1.10.4.RELEASE</spring-data-mongodb.version>
-		<mongo-driver.version>3.2.2</mongo-driver.version>
+		<spring.version>5.0.4.RELEASE</spring.version>
+		<spring-data-mongodb.version>2.0.5.RELEASE</spring-data-mongodb.version>
+		<mongo-driver.version>3.6.3</mongo-driver.version>
 		<junit.version>4.12</junit.version>
 		<!-- Plugin的属性定义 -->
 		<jetty.version>9.0.2.v20130417</jetty.version>
@@ -23,8 +23,8 @@
 		<!-- <querydsl.version>3.6.3</querydsl.version> -->
 		<javax.persistence.version>1.0.2</javax.persistence.version>
 		<faceye-util-manager.version>1.0</faceye-util-manager.version>
-		<jdk.version>1.7</jdk.version>
-		<querydsl.version>4.1.2</querydsl.version>
+		<jdk.version>1.8</jdk.version>
+		<querydsl.version>4.2.0</querydsl.version>
 	</properties>
 	<prerequisites>
 		<maven>3.0.0</maven>
@@ -72,12 +72,18 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>${spring-data-mongodb.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-maven-plugin</artifactId> <version>${querydsl.version}</version> 
-			</dependency> -->
+		<!-- <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-maven-plugin</artifactId> 
+			<version>${querydsl.version}</version> </dependency> -->
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-mongodb</artifactId>
-			<!-- <exclusions> <exclusion> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> </exclusion> </exclusions> -->
+			<!-- <exclusions> <exclusion> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
+				</exclusion> </exclusions> -->
 			<version>${querydsl.version}</version>
 		</dependency>
 	</dependencies>
@@ -143,10 +149,12 @@
 						</configuration>
 					</execution>
 				</executions>
-				
-			  <!-- <dependencies> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-apt</artifactId> <version>${querydsl.version}</version> 
-					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-mongodb</artifactId> <version>${querydsl.version}</version> 
-					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-codegen</artifactId> <version>${querydsl.version}</version> 
+
+				<!-- <dependencies> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-apt</artifactId> <version>${querydsl.version}</version> 
+					</dependency> <dependency> <groupId>com.mysema.querydsl</groupId> <artifactId>querydsl-mongodb</artifactId> 
+					<version>${querydsl.version}</version> </dependency> <dependency> <groupId>com.mysema.querydsl</groupId> 
+					<artifactId>querydsl-codegen</artifactId> <version>${querydsl.version}</version> 
 					</dependency> </dependencies> -->
 			</plugin>
 
@@ -157,7 +165,8 @@
 				<configuration>
 					<!-- not append assembly id in release file name -->
 					<appendAssemblyId>false</appendAssemblyId>
-					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> </descriptors> -->
+					<!-- <descriptors> <descriptor> src/main/assemble/package.xml </descriptor> 
+						</descriptors> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -169,15 +178,18 @@
 						<configuration>
 							<skipAssembly>false</skipAssembly><!-- 跳过这个执行器 -->
 							<!-- 自定义输出目录（finalName为最终项目构建名称） -->
-							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib </outputDirectory> -->
+							<!-- <outputDirectory> ${project.build.directory}/${project.build.finalName}/WEB-INF/lib 
+								</outputDirectory> -->
 							<!-- 描述符文件 -->
 							<descriptors>
 								<descriptor>src/main/resources/assembly/jar.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
-					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> </goals> <configuration> <skipAssembly>true</skipAssembly> 
-						<descriptors> <descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> </execution> -->
+					<!-- <execution> <id>make-zip</id> <phase>package</phase> <goals> <goal>single</goal> 
+						</goals> <configuration> <skipAssembly>true</skipAssembly> <descriptors> 
+						<descriptor>src/main/assembly/zip.xml</descriptor> </descriptors> </configuration> 
+						</execution> -->
 				</executions>
 			</plugin>
 
@@ -253,8 +265,9 @@
 				<filters>
 					<filter>src/main/filters/dev.properties</filter>
 				</filters>
-				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> <filtering>true</filtering> <includes> <include>config.json</include> 
-					</includes> </resource> </resources> -->
+				<!-- <resources> <resource> <directory>src/main/webapp/jsp</directory> 
+					<filtering>true</filtering> <includes> <include>config.json</include> </includes> 
+					</resource> </resources> -->
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -364,7 +377,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>jdk-1.7</id>
+			<id>jdk-1.8</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 				<jdk>${jdk.version}</jdk>
@@ -422,10 +435,12 @@
 
 	</repositories>
 	<pluginRepositories>
-		<!-- <pluginRepository> <id>nexus-oschina</id> <name>local private nexus</name> <url>http://maven.oschina.net/content/groups/public/</url> <releases> 
-			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> </pluginRepository> <pluginRepository> <id>maven-net-cn</id> 
-			<name>Maven China Mirror</name> <url>http://maven.net.cn/content/groups/public/</url> <releases> <enabled>true</enabled> </releases> <snapshots> 
-			<enabled>false</enabled> </snapshots> </pluginRepository> -->
+		<!-- <pluginRepository> <id>nexus-oschina</id> <name>local private nexus</name> 
+			<url>http://maven.oschina.net/content/groups/public/</url> <releases> <enabled>true</enabled> 
+			</releases> <snapshots> <enabled>true</enabled> </snapshots> </pluginRepository> 
+			<pluginRepository> <id>maven-net-cn</id> <name>Maven China Mirror</name> 
+			<url>http://maven.net.cn/content/groups/public/</url> <releases> <enabled>true</enabled> 
+			</releases> <snapshots> <enabled>false</enabled> </snapshots> </pluginRepository> -->
 		<pluginRepository>
 			<id>com.springsource.repository.bundles.release</id>
 			<url>http://repository.springsource.com/maven/bundles/release</url>

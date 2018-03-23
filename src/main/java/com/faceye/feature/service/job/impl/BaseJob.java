@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.faceye.feature.service.job.Job;
-import com.faceye.feature.util.ServiceException;
+ 
 
 abstract public class BaseJob implements Job {
     

@@ -329,6 +329,10 @@ public class DynamicSpecifications {
 				}
 			}
 		}
+		if(CollectionUtils.isEmpty(predicates)){
+			NumberPath numberPath = (NumberPath) createPath(builder, clazz, "id", "0");
+			predicates.add(numberPath.gt(NumberUtils.createNumber("0")));
+		}
 		return predicates;
 	}
 

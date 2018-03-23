@@ -1,6 +1,6 @@
 package com.faceye.feature.service;
 
-import com.faceye.feature.util.ServiceException;
+ 
 
 public interface PropertyService {
 

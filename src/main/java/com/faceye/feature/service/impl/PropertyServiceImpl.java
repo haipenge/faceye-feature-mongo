@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.faceye.feature.service.PropertyService;
-import com.faceye.feature.util.ServiceException;
+ 
 
 @Service
 public class PropertyServiceImpl implements PropertyService {

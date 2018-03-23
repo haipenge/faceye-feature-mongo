@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,10 +30,12 @@ import org.springframework.util.ClassUtils;
 
 import com.faceye.feature.doc.Sequence;
 import com.faceye.feature.repository.mongo.BaseMongoRepository;
+import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.BaseService;
 import com.faceye.feature.service.Reporter;
 import com.faceye.feature.service.SequenceService;
-import com.faceye.feature.util.ServiceException;
+ 
+import com.querydsl.core.types.Predicate;
 
 /**
  * 基于Mongo的底层服务实现
@@ -42,7 +45,8 @@ import com.faceye.feature.util.ServiceException;
  * @param <ID>
  * @param <D>
  */
-public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends BaseMongoRepository<T, ID>> implements BaseService<T, ID> {
+public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends BaseMongoRepository<T, ID>>
+		implements BaseService<T, ID> {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
@@ -61,7 +65,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	}
 
 	@Override
-	public T save(T entity)  {
+	public T save(T entity) {
 		try {
 			ID id = (ID) PropertyUtils.getProperty(entity, "id");
 			if (id == null) {
@@ -74,11 +78,11 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 		} catch (NoSuchMethodException e) {
 			logger.error(">>FaceYe throws Exception: --->" + e.toString(), e);
 		}
-		entity=dao.save(entity);
+		entity = dao.save(entity);
 		return entity;
 	}
 
-	public void save(Iterable<T> entities)  {
+	public void save(Iterable<T> entities) {
 		if (entities != null) {
 			Iterator<T> iterator = entities.iterator();
 			while (iterator.hasNext()) {
@@ -87,7 +91,8 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 				try {
 					id = (ID) PropertyUtils.getProperty(entity, "id");
 					if (id == null) {
-						PropertyUtils.setProperty(entity, "id", this.sequenceService.getNextSequence(entityClass.getName()));
+						PropertyUtils.setProperty(entity, "id",
+								this.sequenceService.getNextSequence(entityClass.getName()));
 					}
 				} catch (IllegalAccessException e) {
 					logger.error(">>FaceYe throws Exception: --->" + e.toString());
@@ -98,73 +103,79 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 				}
 			}
 		}
-		dao.save(entities);
+		dao.saveAll(entities);
 	}
 
 	@Override
-	public T saveAndFlush(T entity)  {
+	public T saveAndFlush(T entity) {
 		return save(entity);
 	}
 
 	@Override
-	public void remove(ID id)  {
-		dao.delete(id);
+	public void remove(ID id) {
+		dao.deleteById(id);
 	}
 
 	@Override
-	public void remove(T entity)  {
+	public void remove(T entity) {
 		dao.delete(entity);
 	}
 
 	@Override
-	public void removeAll()  {
+	public void removeAll() {
 		dao.deleteAll();
 	}
 
 	@Override
-	public void removeAllInBatch()  {
+	public void removeAllInBatch() {
 		this.removeAll();
 	}
 
 	@Override
-	public void removeInBatch(Iterable<T> entities)  {
-		this.dao.delete(entities);
+	public void removeInBatch(Iterable<T> entities) {
+		dao.deleteAll(entities);
 	}
 
 	@Override
-	public T get(ID id)  {
-		return dao.findOne(id);
+	public T get(ID id) {
+		return dao.findById(id).get();
 	}
 
 	@Override
-	public List<T> getAll()  {
+	public List<T> getAll() {
 		return dao.findAll();
 	}
 
 	@Override
-	public List<T> getAll(Iterable<ID> ids)  {
+	public List<T> getAll(Iterable<ID> ids) {
 		List<T> res = null;
-		Iterable<T> its = dao.findAll(ids);
+		Iterable<T> its = dao.findAllById(ids);
 		res = (List) its;
 		return res;
 	}
 
 	@Override
-	public Page<T> getPage(Map<String, Object> searchParams, int page, int size)  {
-		// if (page != 0) {
-		// page = page - 1;
-		// }
-		// SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
+	public Page<T> getPage(Map<String, Object> searchParams, int page, int size) {
+		if (page != 0) {
+			page = page - 1;
+		}
+		// SimpleEntityPathResolver resolver =
+		// SimpleEntityPathResolver.INSTANCE;
 		// EntityPath<T> entityPath = resolver.createPath(entityClass);
-		// PathBuilder<T> builder = new PathBuilder<T>(entityPath.getType(), entityPath.getMetadata());
+		// PathBuilder<T> builder = new PathBuilder<T>(entityPath.getType(),
+		// entityPath.getMetadata());
 		// Path path = entityPath.getRoot();
-		// List<Predicate> predicates=DynamicSpecifications.buildPredicates(searchParams, entityClass);
+		// List<Predicate>
+		// predicates=DynamicSpecifications.buildPredicates(searchParams,
+		// entityClass);
 		// Predicate predicate=DynamicSpecifications.builder(predicates);
 		// NumberPath numberPath = new NumberPath(Number.class, path, "age");
 		// predicates.add(numberPath.eq(15));
-		// Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+		// Predicate predicate = DynamicSpecifications.builder(searchParams,
+		// entityClass);
 		// if (predicate != null) {
-		// logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		// logger.debug(">>FaceYe -->Query predicate is:" +
+		// predicate.toString());
 		// }
 		// Sort sort = new Sort(Direction.DESC, "id");
 		// Page<T> res = null;
@@ -172,20 +183,48 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 		// Pageable pageable = new PageRequest(page, size, sort);
 		// res = this.dao.findAll(predicate, pageable);
 		// } else {
-		// // OrderSpecifier<Comparable> orderPOrderSpecifier=new OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id") {
+		// // OrderSpecifier<Comparable> orderPOrderSpecifier=new
+		// OrderSpecifier<Comparable>(new Order(), new NumberExpression<T>("id")
+		// {
 		// // })
 		// List<T> items = (List) this.dao.findAll(predicate,sort);
 		// res = new PageImpl<T>(items);
 		// }
-		return this.dao.getPage(searchParams, page, size);
+		Predicate predicate = DynamicSpecifications.builder(searchParams, entityClass);
+		if (predicate != null) {
+			logger.debug(">>FaceYe -->Query predicate is:" + predicate.toString());
+		} else {
+			logger.debug(">>FaceYe --> predicate is null.");
+		}
+		Sort sort = this.buildSort(searchParams);
+		Page<T> res = null;
+		if (size != 0) {
+			Pageable pageable = PageRequest.of(page, size, sort);
+			if (predicate == null) {
+				res = dao.findAll(pageable);
+			} else {
+				res = dao.findAll(predicate, pageable);
+			}
+		} else {
+			// OrderSpecifier<Comparable> orderPOrderSpecifier=new
+			// OrderSpecifier<Comparable>(new Order(), new
+			// NumberExpression<T>("id") {
+			// })
+			List<T> items = null;
+			if (predicate == null) {
+				items = (List) dao.findAll(sort);
+			} else {
+				items = (List) dao.findAll(predicate, sort);
+			}
+			res = new PageImpl<T>(items);
+		}
+		return res;
 	}
 
 	/**
-	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc"); 
-	 * 如果有多个排序key params.put("SORT|property:0","asc");
-	 *  params.put("SORT|property:1","asc");
-	 *   ... 
-	 *   排序将以0...n的方式进行
+	 * 构造sort对像,params 参数结构 :params.put("SORT|property","asc"); 如果有多个排序key
+	 * params.put("SORT|property:0","asc"); params.put("SORT|property:1","asc");
+	 * ... 排序将以0...n的方式进行
 	 * 
 	 * @param params
 	 * @return
@@ -196,7 +235,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 	protected Sort buildSort(Map<String, Object> params) {
 		Sort sort = null;
 		List<Map<Sort, Integer>> sorts = new ArrayList<Map<Sort, Integer>>(0);
-		params=this.filterDuplicateKey(params);
+		params = this.filterDuplicateKey(params);
 		Iterator<String> it = params.keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();
@@ -245,36 +284,37 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 		}
 		return sort;
 	}
-	
+
 	/**
 	 * 对KEY进行去重
+	 * 
 	 * @return
 	 * @Desc:
 	 * @Author:haipenge
 	 * @Date:2017年7月15日 下午7:57:01
 	 */
-	private Map filterDuplicateKey(Map<String,Object> params){
-		Map map=new HashMap<String,Object>();
-		if(MapUtils.isNotEmpty(params)){
-			Iterator<String> it=params.keySet().iterator();
-			while(it.hasNext()){
-				String key=it.next();
-				Object value=MapUtils.getObject(params, key);
-				if(!this.isMapContainsIgnoreCaseKey(map, key)){
+	private Map filterDuplicateKey(Map<String, Object> params) {
+		Map map = new HashMap<String, Object>();
+		if (MapUtils.isNotEmpty(params)) {
+			Iterator<String> it = params.keySet().iterator();
+			while (it.hasNext()) {
+				String key = it.next();
+				Object value = MapUtils.getObject(params, key);
+				if (!this.isMapContainsIgnoreCaseKey(map, key)) {
 					map.put(key, value);
 				}
 			}
 		}
 		return map;
 	}
-	
-	private boolean isMapContainsIgnoreCaseKey(Map<String,Object> map,String key){
-		boolean res=false;
-	    Iterator<String> it=map.keySet().iterator();
-	    while(it.hasNext()){
-	    	String mapKey=it.next();
-	    	res=StringUtils.equalsIgnoreCase(mapKey, key);
-	    }
+
+	private boolean isMapContainsIgnoreCaseKey(Map<String, Object> map, String key) {
+		boolean res = false;
+		Iterator<String> it = map.keySet().iterator();
+		while (it.hasNext()) {
+			String mapKey = it.next();
+			res = StringUtils.equalsIgnoreCase(mapKey, key);
+		}
 		return res;
 	}
 
@@ -309,11 +349,12 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 				}
 			}
 		}
-		//todo ,多层对像，需逐层判断
-		if(!isExist && StringUtils.contains(propertyName, ".")){
-			isExist=true;
+		// todo ,多层对像，需逐层判断
+		if (!isExist && StringUtils.contains(propertyName, ".")) {
+			isExist = true;
 		}
-		// Map properties = PropertyUtils.getMappedPropertyDescriptors(entityClass);
+		// Map properties =
+		// PropertyUtils.getMappedPropertyDescriptors(entityClass);
 		// if (properties != null && properties.containsKey(propertyName)) {
 		// isExist = true;
 		// }

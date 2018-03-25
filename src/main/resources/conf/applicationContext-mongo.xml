@@ -72,7 +72,7 @@
 	<!-- <mongo:repositories base-package="com.faceye" repository-impl-postfix="Impl" 
 		factory-class="com.faceye.feature.repository.mongo.impl.BaseMongoRepositoryBean" 
 		/> -->
-	<mongo:repositories base-package="com.faceye.*">
+	<mongo:repositories base-package="com.faceye.*" repository-impl-postfix="Impl">
 	</mongo:repositories>
 
 	<!-- <mongo:repositories base-package="com.faceye.*" base-class="com.faceye.feature.repository.mongo.impl.BaseMongoRepositoryImpl" 

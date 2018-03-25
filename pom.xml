@@ -24,7 +24,7 @@
 		<javax.persistence.version>1.0.2</javax.persistence.version>
 		<faceye-util-manager.version>1.0</faceye-util-manager.version>
 		<jdk.version>1.8</jdk.version>
-		<querydsl.version>4.2.0</querydsl.version>
+		<querydsl.version>4.2.1</querydsl.version>
 	</properties>
 	<prerequisites>
 		<maven>3.0.0</maven>

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import com.faceye.feature.repository.SearchFilter;
@@ -86,6 +87,7 @@ public class DynamicSpecifications {
 		EntityPath<T> entityPath = resolver.createPath(clazz);
 		PathBuilder<T> builder = new PathBuilder<T>(entityPath.getType(), entityPath.getMetadata());
 		Path<?> path = entityPath.getRoot();
+
 		if (MapUtils.isNotEmpty(searchFilters)) {
 			for (SearchFilter searchFilter : searchFilters.values()) {
 				Operator operator = searchFilter.operator;
@@ -101,8 +103,17 @@ public class DynamicSpecifications {
 				case EQ:
 					if (fieldValue != null) {
 						if (isNumber || fieldValue instanceof Number) {
-							NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
-							predicates.add(numberPath.eq(NumberUtils.createNumber(fieldValue.toString())));
+							if (StringUtils.contains(fieldName, "$id")) {
+								Object instance=getObjectReferenceInstance(clazz,fieldName,fieldValue.toString());
+								String property=StringUtils.replace(fieldName, ".$id", "");
+//								SimplePath simplePath =createPath(builder, clazz, fieldName, fieldValue.toString());
+								Class propertyClass = ReflectionUtils.findField(clazz, property).getType();
+								SimplePath simplePath = builder.getSimple(property, propertyClass);
+								predicates.add(simplePath.eq(instance));
+							} else {
+								NumberPath numberPath = (NumberPath) createPath(builder, clazz, fieldName, fieldValue.toString());
+								predicates.add(numberPath.eq(NumberUtils.createNumber(fieldValue.toString())));
+							}
 						} else if (fieldValue instanceof String) {
 							// StringPath stringPath = new StringPath(path, fieldName);
 							StringPath stringPath = builder.getString(fieldName);
@@ -329,7 +340,7 @@ public class DynamicSpecifications {
 				}
 			}
 		}
-		if(CollectionUtils.isEmpty(predicates)){
+		if (CollectionUtils.isEmpty(predicates)) {
 			NumberPath numberPath = (NumberPath) createPath(builder, clazz, "id", "0");
 			predicates.add(numberPath.gt(NumberUtils.createNumber("0")));
 		}
@@ -340,13 +351,44 @@ public class DynamicSpecifications {
 		boolean isNumber = NumberUtils.isNumber(propertyValue);
 		if (isNumber) {
 			if (StringUtils.contains(propertyName, "$id")) {
-				return builder.getNumber(propertyName, Long.class);
+				// builder.as(clazz).
+				String property = StringUtils.replace(propertyName, ".$id", "");
+				Class propertyClass = ReflectionUtils.findField(clazz, property).getDeclaringClass();
+				SimplePath simplePath = builder.getSimple(property, propertyClass);
+				// return builder.getNumber(propertyName, Long.class);
+				// return simplePath.eq(instance);
+				// Path p=null;
+				return simplePath;
 			} else {
 				return createPath(builder, clazz, propertyName);
 			}
 		} else {
 			return createPath(builder, clazz, propertyName);
 		}
+	}
+
+	private static Object getObjectReferenceInstance(Class clazz, String propertyName, String propertyValue) {
+		Object instance = null;
+		String property = StringUtils.replace(propertyName, ".$id", "");
+		Class propertyClass = ReflectionUtils.findField(clazz, property).getType();
+		// return builder.getNumber(propertyName, Long.class);
+		Field id = null;
+		try {
+			instance = propertyClass.newInstance();
+//			ReflectionUtils.find
+			id=ReflectionUtils.findField(propertyClass, "id");
+			ReflectionUtils.makeAccessible(id);
+//			id = propertyClass.getField("id");
+//			id.setAccessible(true);
+			ReflectionUtils.setField(id, instance, NumberUtils.createLong(propertyValue));
+		} catch (InstantiationException e) {
+			logger.error(">>FaceYe Throws Exception:", e);
+		} catch (IllegalAccessException e) {
+			logger.error(">>FaceYe Throws Exception:", e);
+		}  catch (SecurityException e) {
+			logger.error(">>FaceYe Throws Exception:", e);
+		}
+		return instance;
 	}
 
 	private static SimpleExpression<?> createPath(PathBuilder builder, Class clazz, String propertyName) {
@@ -370,7 +412,7 @@ public class DynamicSpecifications {
 				logger.debug(">>FaceYe --> Default simple expression creator:class is:" + clazz.getName() + ",propery is :" + propertyName + ",type is:" + typeName);
 			}
 			// FieldTypeEnum type=field.getType().get
-		} 
+		}
 		return null;
 	}
 }

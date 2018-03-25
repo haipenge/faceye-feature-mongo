@@ -34,7 +34,7 @@ import com.faceye.feature.repository.mongo.DynamicSpecifications;
 import com.faceye.feature.service.BaseService;
 import com.faceye.feature.service.Reporter;
 import com.faceye.feature.service.SequenceService;
- 
+import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -318,24 +318,7 @@ public abstract class BaseMongoServiceImpl<T, ID extends Serializable, D extends
 		return res;
 	}
 
-	/**
-	 * 对排序key的排序
-	 * 
-	 * @author haipenge
-	 *
-	 */
-	class SortComparator implements Comparator<Map<Sort, Integer>> {
-		@Override
-		public int compare(Map<Sort, Integer> o1, Map<Sort, Integer> o2) {
-			int res = 0;
-			if (o1 != null && o2 != null) {
-				Integer v1 = o1.values().iterator().next();
-				Integer v2 = o2.values().iterator().next();
-				res = v1.compareTo(v2);
-			}
-			return res;
-		}
-	}
+	
 
 	protected boolean isPropertyExist(String propertyName) {
 		boolean isExist = false;

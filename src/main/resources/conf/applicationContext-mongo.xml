@@ -56,10 +56,10 @@
 	<mongo:mongo-client host="${mongo.host}" port="${mongo.port}">
 		<mongo:client-options connections-per-host="8"
                    threads-allowed-to-block-for-connection-multiplier="4"
-                   connect-timeout="1000"
-                   max-wait-time="1500"
+                   connect-timeout="30000"
+                   max-wait-time="15000"
                    socket-keep-alive="true"
-                   socket-timeout="1500"/>
+                   socket-timeout="15000"/>
 	</mongo:mongo-client>
 	<mongo:db-factory mongo-ref="mongoClient" dbname="${mongo.db}" />
 	<!-- <mongo:mongo-client credentials="user:password@database" /> <mongo:db-factory 

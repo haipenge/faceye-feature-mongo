@@ -12,7 +12,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import com.faceye.feature.repository.SearchFilter;
@@ -20,11 +19,13 @@ import com.faceye.feature.repository.SearchFilter.Operator;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.ArrayPath;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.BooleanPath;
+import com.querydsl.core.types.dsl.DateExpression;
 import com.querydsl.core.types.dsl.DatePath;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -334,6 +335,13 @@ public class DynamicSpecifications {
 					} else {
 						SimplePath simplePath = builder.getSimple(fieldName, fieldValue.getClass());
 						predicates.add(simplePath.notIn(fieldValue));
+					}
+					break;
+				case BTW:
+					if(fieldValue instanceof DatePair){
+						DatePair pair=(DatePair)fieldValue;
+						DatePath datePath = builder.getDate(fieldName, Date.class);
+						predicates.add(datePath.between(pair.getStart(), pair.getEnd()));
 					}
 					break;
 				default:

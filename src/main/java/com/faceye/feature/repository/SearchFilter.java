@@ -18,7 +18,7 @@ import com.google.common.collect.Maps;
 public class SearchFilter {
 
 	public enum Operator {
-		EQ, LIKE, GT, LT, GTE, LTE, ISTRUE, ISFALSE,BOOLEAN, ISEMPTY, ISNULL, NE,IN,NOTIN
+		EQ, LIKE, GT, LT, GTE, LTE, ISTRUE, ISFALSE,BOOLEAN, ISEMPTY, ISNULL, NE,IN,NOTIN,BTW
 	}
 
 	public String fieldName;

@@ -9,7 +9,6 @@
 	<version>1.0</version>
 	<packaging>jar</packaging>
 	<name>faceye-feature-mongo</name>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- 主要依赖库的版本定义 -->

@@ -17,7 +17,7 @@
 		<mongo-driver.version>3.10.2</mongo-driver.version>
 		<junit.version>4.12</junit.version>
 		<!-- Plugin的属性定义 -->
-		<jetty.version>9.0.2.v20130417</jetty.version>
+		<jetty.version>10.0.10</jetty.version>
 		<jetty.orbit.version>3.0.0.v201112011016</jetty.orbit.version>
 		<!-- <querydsl.version>3.6.3</querydsl.version> -->
 		<javax.persistence.version>1.0.2</javax.persistence.version>
